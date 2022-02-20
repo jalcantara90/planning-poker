@@ -1,4 +1,5 @@
-import styled from "styled-components";
+import styled from 'styled-components';
+import { motion } from 'framer-motion';
 
 export const HomeContainer = styled.div`
   display: flex;
@@ -13,7 +14,7 @@ export const HomeContainer = styled.div`
 
 `;
 
-export const HomeTextContainer = styled.div`
+export const HomeTextContainer = styled(motion.div)`
   max-width: 30rem;  
 
   @media (max-width: 1130px) {
@@ -21,4 +22,11 @@ export const HomeTextContainer = styled.div`
     flex-direction: column;
     align-items: center;
   }
-`
+`;
+
+export const HomeTitle = styled(motion.h1)`
+
+`;
+export const HomeDescription = styled(motion.p)`
+
+`;
