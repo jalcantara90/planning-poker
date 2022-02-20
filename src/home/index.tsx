@@ -22,7 +22,7 @@ export const Home = () => {
           <Spacer y={2}/>
           <Text b>Simple and engaging tool to make estimates.</Text>
           <Spacer y={2}/>
-          <Button size="xl" color="g">
+          <Button size="xl" color="gradient">
             Start new game
           </Button>
         </HomeTextContainer>
