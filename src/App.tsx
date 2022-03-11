@@ -15,6 +15,7 @@ const darkTheme = createTheme({
 });
 
 import { Home } from './home';
+import { Game } from './game';
 import { Layout } from './core/layout';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/:gameId" element={<Game />} />
           </Routes>
         </Layout>
       </BrowserRouter>
