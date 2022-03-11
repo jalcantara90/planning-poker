@@ -23,3 +23,32 @@ export const fadeInUp = {
   initial: 'hidden',
   animate: 'visible'
 }
+
+export const fadeInStaggerContainer = {
+  variants: {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: {
+        staggerChildren: .2
+      }
+    },
+  },
+  initial: 'hidden',
+  animate: 'visible'
+}
+
+export const fadeInDown = {
+  variants: {
+    hidden: { opacity: 0, y: 200 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: {
+        duration: .4
+      } 
+    }
+  },
+  initial: 'hidden',
+  animate: 'visible'
+}
