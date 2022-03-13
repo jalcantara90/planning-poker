@@ -1,6 +1,7 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToOne, JoinColumn } from 'typeorm';
 
-import { VotingSystem } from '../types';
+import { VotingSystemEntity } from '@infrastructure/entities';
+
 import { BaseEntity } from './base.entity';
 
 @Entity({ name: 'game' })
@@ -8,6 +9,7 @@ export class GameEntity extends BaseEntity {
   @Column({ type: 'varchar' })
   name: string;
 
-  @Column({ type: 'int' })
-  votingSystem: VotingSystem;
+  @OneToOne(() => VotingSystemEntity)
+  @JoinColumn()
+  votingSystem: VotingSystemEntity;
 }

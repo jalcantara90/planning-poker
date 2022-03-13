@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import config from "../config";
 import { GameEntity } from "./entities/game.entity";
+import { VotingSystemEntity } from './entities/voting-system.entity';
+import { VotingSystemOptionEntity } from './entities/voting-system-options.entity';
 
 @Global()
 @Module({
@@ -18,7 +20,9 @@ import { GameEntity } from "./entities/game.entity";
           password: configService.postgresPassword,
           database: configService.postgresDatabase,
           entities: [
-            GameEntity
+            GameEntity,
+            VotingSystemEntity,
+            VotingSystemOptionEntity
           ],
           synchronize: true,
         };

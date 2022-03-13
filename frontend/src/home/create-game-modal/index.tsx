@@ -34,13 +34,13 @@ export const CreateGameModal: FC<CreateGameModalProps> = ({ visible, onClose }) 
 
   const { control, handleSubmit, formState: { isValid } } = methods;
 
-  const handleCreate = (values: CreateGameForm) => {
+  const handleCreate = async (values: CreateGameForm) => {
     const game: Game = {
       name: values.name,
       votingSystem: votingSystemList.find(vs => vs.id === values.votingSystem) ?? {} as VotingSystem ,
       members: []
     }
-    create(game);
+    await create(game);
     navigate('gameId');
     onClose();
   }

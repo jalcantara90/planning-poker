@@ -1,5 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { VotingSystem } from '@infrastructure/types';
+
+export class VotingSystem {
+  @ApiProperty() name: string;
+  @ApiProperty() options: string[];
+}
 
 export class GetGameByIdResponse {
   @ApiProperty() id: string;

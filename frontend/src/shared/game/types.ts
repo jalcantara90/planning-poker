@@ -30,3 +30,12 @@ export const votingSystemList = [
   FibonnacciSystem,
   TShirtSystem
 ];
+
+export type CreateGameRequest = {
+  name: string;
+  votingSystem: VotingSystem;
+}
+
+export type CreateGameResponse = {
+  id: string;
+}

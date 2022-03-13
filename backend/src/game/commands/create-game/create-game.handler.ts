@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommandHandler, ICommandHandler} from '@nestjs/cqrs';
 
-import { GameEntity } from '@infrastructure/entities';
+import { GameEntity, VotingSystemEntity } from '@infrastructure/entities';
 
 import { CreateGameCommand } from './create-game.command';
 import { CreateGameResponse } from './create-game.response';
@@ -12,10 +12,17 @@ export class CreateGameHandler implements ICommandHandler<CreateGameCommand, Cre
   constructor(
     @InjectRepository(GameEntity)
     private gameRepository: Repository<GameEntity>,
+    @InjectRepository(VotingSystemEntity)
+    private votingSystemRepository: Repository<VotingSystemEntity>,
   ) {}
 
   async execute(command: CreateGameCommand) {
-    const game = await this.gameRepository.save(command);
+    const votingSystem = await this.votingSystemRepository.findOne(command.votingSystemId);
+
+    const game = await this.gameRepository.save({
+      ...command,
+      votingSystem
+    });
     return new CreateGameResponse(game.id);
   }
 }

@@ -1,10 +1,11 @@
 import { Repository } from 'typeorm';
-import { ICommandHandler, CommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ICommandHandler, CommandHandler } from '@nestjs/cqrs';
 
-import { GameEntity } from '@infrastructure/entities';
-import { GetGameByIdResponse } from './get-game-by-id.response';
+import { GameEntity, VotingSystemOptionEntity, VotingSystemEntity } from '@infrastructure/entities';
+
 import { GetGameByIdCommand } from './get-game-by-id.command';
+import { GetGameByIdResponse } from './get-game-by-id.response';
 
 @CommandHandler(GetGameByIdCommand)
 export class GetGameByIdHandler implements ICommandHandler<GetGameByIdCommand, GetGameByIdResponse> {
@@ -13,13 +14,19 @@ export class GetGameByIdHandler implements ICommandHandler<GetGameByIdCommand, G
     private gameRepository: Repository<GameEntity>
   ) {}
   
-  async execute(command: GetGameByIdCommand): Promise<GetGameByIdResponse> {
-    const game = await this.gameRepository.findOne(command.id);
-
+  async execute(command: GetGameByIdCommand){
+    const game = await this.gameRepository.createQueryBuilder('game')
+      .innerJoinAndMapOne('game.votingSystem', VotingSystemEntity, 'votingSystem', 'game.votingSystem = votingSystem.id')
+      .leftJoinAndMapMany(`votingSystem.options`, VotingSystemOptionEntity, 'votingSystemOptions', 'votingSystem.id = votingSystemOptions.votingSystemId')
+      .getOne();
+    
     return new GetGameByIdResponse(
       game.id,
       game.name,
-      game.votingSystem
+     {
+       name: game.votingSystem.name,
+       options: game.votingSystem.options?.map(({ value }) => value)
+     }
     );
   }
 
