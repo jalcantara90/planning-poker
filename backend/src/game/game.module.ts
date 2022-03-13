@@ -1,17 +1,22 @@
-import { Logger, Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Logger, Module } from '@nestjs/common';
 
-import { CreateGameHandler } from './commands/create-game/create-game.handler';
+import { GameEntity } from '@infrastructure/entities';
+
 import { GameController } from './controller/game.controller';
+import { CreateGameHandler } from './commands/create-game/create-game.handler';
+import { GetGameByIdHandler } from './queries/get-game-by-id/get-game-by-id.handler';
 
 const handlers = [
-  CreateGameHandler
+  CreateGameHandler,
+  GetGameByIdHandler
 ];
 
 @Module({
   imports: [
     CqrsModule,
-    
+    TypeOrmModule.forFeature([GameEntity])
   ],
   providers: [
     ...handlers,

@@ -3,6 +3,7 @@ import { Global, Module } from "@nestjs/common";
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import config from "../config";
+import { GameEntity } from "./entities/game.entity";
 
 @Global()
 @Module({
@@ -16,7 +17,9 @@ import config from "../config";
           username: configService.postgresUser,
           password: configService.postgresPassword,
           database: configService.postgresDatabase,
-          entities: [],
+          entities: [
+            GameEntity
+          ],
           synchronize: true,
         };
       },
