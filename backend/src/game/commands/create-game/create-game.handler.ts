@@ -1,14 +1,21 @@
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CommandHandler, ICommandHandler} from '@nestjs/cqrs';
 
+import { GameEntity } from '@infrastructure/entities';
+
 import { CreateGameCommand } from './create-game.command';
+import { CreateGameResponse } from './create-game.response';
 
 @CommandHandler(CreateGameCommand)
-export class CreateGameHandler implements ICommandHandler<CreateGameCommand> {
-  constructor() {}
+export class CreateGameHandler implements ICommandHandler<CreateGameCommand, CreateGameResponse> {
+  constructor(
+    @InjectRepository(GameEntity)
+    private gameRepository: Repository<GameEntity>,
+  ) {}
 
   async execute(command: CreateGameCommand) {
-    return Promise.resolve({
-      ...command
-    });
+    const game = await this.gameRepository.save(command);
+    return new CreateGameResponse(game.id);
   }
 }

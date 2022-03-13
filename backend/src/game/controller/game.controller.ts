@@ -1,24 +1,33 @@
 import { CommandBus } from '@nestjs/cqrs';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, HttpStatus, Post, Get, Param } from '@nestjs/common';
 
-import { CreateGameRequest } from '../dtos/request/create-game.request';
-import { CreateGameResponse } from '../dtos/response/create-game.response';
-import { CreateGameCommand } from '../commands/create-game/create-game.command';
+import { GetGameByIdCommand, GetGameByIdResponse } from '../queries/get-game-by-id';
+import { CreateGameRequest, CreateGameResponse, CreateGameCommand } from '../commands/create-game';
 
-@Controller('game')
+@ApiTags('Games')
+@Controller('games')
 export class GameController {
 
   constructor(
     private commandBus: CommandBus
   ) {}
 
+  @Get(':id')
+  @ApiOperation({ summary: 'Get game by Id' })
+  @ApiResponse({ status: HttpStatus.OK, type: GetGameByIdResponse })
+  public async getGameById(@Param('id') id: string): Promise<GetGameByIdResponse> {
+    return await this.commandBus.execute(
+      new GetGameByIdCommand(id)
+    );
+  }
+
   @Post()
   @ApiOperation({ summary: 'Create game' })
   @ApiResponse({ status: HttpStatus.CREATED, description: 'The Game has been successfully created.', type: CreateGameResponse })
-  public async createGame(@Body() createGame: CreateGameRequest) {
+  public async createGame(@Body() { name, votingSystem }: CreateGameRequest) {
     return await this.commandBus.execute(
-      new CreateGameCommand(createGame.name, createGame.votingSystem)
+      new CreateGameCommand(name, votingSystem)
     );
   }
 }
