@@ -2,7 +2,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Logger, Module } from '@nestjs/common';
 
-import { GameEntity, VotingSystemEntity } from '@infrastructure/entities';
+import { Game, VotingSystem } from '@infrastructure/entities';
 
 import { GameController } from './controller/game.controller';
 import { CreateGameHandler } from './commands/create-game/create-game.handler';
@@ -17,8 +17,8 @@ const handlers = [
   imports: [
     CqrsModule,
     TypeOrmModule.forFeature([
-      GameEntity,
-      VotingSystemEntity
+      Game,
+      VotingSystem
     ])
   ],
   providers: [

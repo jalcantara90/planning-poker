@@ -1,14 +1,12 @@
 import { FC } from 'react';
-import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from 'react-hook-form';
 import { Modal, Text, Input, Button, Radio } from '@nextui-org/react';
 
-import { CreateGameForm } from './type';
-import { useGame } from '../../shared/game/hooks';
-import { FibonnacciSystem, Game, TShirtSystem, VotingSystem, votingSystemList } from '../../shared/game/types';
-
+import { CreateGameForm } from './types';
+import { buildValidation } from './validation';
+import { useGameCreate } from '../../shared/game/hooks';
+import { useVotingSystem } from '../../shared/voting-system/hooks';
 
 type CreateGameModalProps = {
   visible: boolean,
@@ -17,31 +15,23 @@ type CreateGameModalProps = {
 
 export const CreateGameModal: FC<CreateGameModalProps> = ({ visible, onClose }) => {
   const navigate = useNavigate();
-  const { create } = useGame();
+  const { create } = useGameCreate();
+  const { votingSystemList } = useVotingSystem();
 
   const methods = useForm<CreateGameForm>({
     mode: 'onChange',
     defaultValues: {
       name: '',
-      votingSystem: FibonnacciSystem.id
+      votingSystemId: ''
     },
-    resolver: yupResolver(
-      yup.object().shape({
-        name: yup.string().required('Name is required')
-      })
-    )
+    resolver: buildValidation()
   });
 
   const { control, handleSubmit, formState: { isValid } } = methods;
 
   const handleCreate = async (values: CreateGameForm) => {
-    const game: Game = {
-      name: values.name,
-      votingSystem: votingSystemList.find(vs => vs.id === values.votingSystem) ?? {} as VotingSystem ,
-      members: []
-    }
-    await create(game);
-    navigate('gameId');
+    const result = await create(values);
+    navigate(result.id);
     onClose();
   }
 
@@ -78,24 +68,18 @@ export const CreateGameModal: FC<CreateGameModalProps> = ({ visible, onClose }) 
           /> 
           
           <Controller
-              name="votingSystem"
-              control={control}
-              render={
-                ({ field }) => (
-                  <Radio.Group row {...field}>
-                    <Radio
-                      value={FibonnacciSystem.id}>
-                      Fibonnacci<Radio.Description>0,1,3,5,8,13,21,34..</Radio.Description>
-                    </Radio>
-        
-                    <Radio
-                      value={TShirtSystem.id}>
-                      T-shirts<Radio.Description>s,m,l,xl</Radio.Description>
-                    </Radio>
-                    <Button size="lg" color="gradient" rounded bordered disabled> Comming soon </Button>
-                  </Radio.Group>
-                )
-              }
+            name="votingSystemId"
+            control={control}
+            render={
+              ({ field }) => (
+                <Radio.Group row {...field}>
+                  {
+                    votingSystemList?.map(votingSystem => <VotingSystemOption key={votingSystem.id} {...votingSystem}/>)
+                  }
+                  <Button size="lg" color="gradient" rounded bordered disabled> Comming soon </Button>
+                </Radio.Group>
+              )
+            }
           />
           
         </Modal.Body>
@@ -106,5 +90,20 @@ export const CreateGameModal: FC<CreateGameModalProps> = ({ visible, onClose }) 
         </Modal.Footer>
       </form>
     </Modal>
+  );
+}
+
+type VotingSystemOptionProps = {
+  id: string;
+  name: string;
+  options: string[];
+};
+
+const VotingSystemOption: FC<VotingSystemOptionProps> = ({ id, name, options }) => {
+  return (
+    <Radio
+      value={id}>
+      {name}<Radio.Description>{options.join(', ')}</Radio.Description>
+    </Radio>
   );
 }

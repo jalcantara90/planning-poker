@@ -110,7 +110,8 @@ export const PlayerCard = styled(motion.div)<{ isDark?: boolean, isSelected?: bo
 export const VotingCardContainer = styled(motion.section)`
   display: flex;
   padding: 5rem;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 1rem;
 `;
 
 export const VotingCard = styled(Card)<{ selected?: boolean, disabled?: boolean }>`
@@ -118,11 +119,15 @@ export const VotingCard = styled(Card)<{ selected?: boolean, disabled?: boolean 
   justify-content: center;
   align-items: center;
   height: 7rem;
-  width: 4rem;
+  width: 4.2rem;
   transform: ${props => props?.selected ? 'translateY(-2rem)' : 'translateY(0)'};
   font-size: 2rem;
   font-weight: bold;
   opacity: ${props => props.disabled ? .7 : 1};
+
+  &:hover {
+    transform: translateY(-5px);
+  }
 `;
 
 export const ResumeContainer = styled(motion.div)`

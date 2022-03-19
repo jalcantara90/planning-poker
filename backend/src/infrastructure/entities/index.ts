@@ -1,3 +1,3 @@
-export { GameEntity } from './game.entity';
-export { VotingSystemEntity } from './voting-system.entity';
-export { VotingSystemOptionEntity } from './voting-system-options.entity';
+export { Game } from './game.entity';
+export { VotingSystem } from './voting-system.entity';
+export { VotingSystemOption } from './voting-system-options.entity';

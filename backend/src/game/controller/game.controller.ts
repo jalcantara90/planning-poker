@@ -25,9 +25,9 @@ export class GameController {
   @Post()
   @ApiOperation({ summary: 'Create game' })
   @ApiResponse({ status: HttpStatus.CREATED, description: 'The Game has been successfully created.', type: CreateGameResponse })
-  public async createGame(@Body() { name, votingSystemId }: CreateGameRequest) {
+  public async createGame(@Body() request: CreateGameRequest) {
     return await this.commandBus.execute(
-      new CreateGameCommand(name, votingSystemId)
+      new CreateGameCommand(request.name, request.votingSystemId)
     );
   }
 }

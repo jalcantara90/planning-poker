@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { VotingSystemEntity } from '@infrastructure/entities';
+import { VotingSystem } from '@infrastructure/entities';
 
 import { CreateVotingSystemCommand } from './create-voting-system.command';
 import { CreateVotingSystemResponse } from './create-voting-system.response';
@@ -11,8 +11,8 @@ import { CreateVotingSystemResponse } from './create-voting-system.response';
 export class CreateVotingSystemHandler implements ICommandHandler<CreateVotingSystemCommand, CreateVotingSystemResponse> {
  
   constructor(
-    @InjectRepository(VotingSystemEntity)
-    private votingSystemRepository: Repository<VotingSystemEntity>,
+    @InjectRepository(VotingSystem)
+    private votingSystemRepository: Repository<VotingSystem>,
   ) {}
 
   async execute(request: CreateVotingSystemCommand): Promise<CreateVotingSystemResponse> {

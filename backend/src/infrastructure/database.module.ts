@@ -3,9 +3,6 @@ import { Global, Module } from "@nestjs/common";
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import config from "../config";
-import { GameEntity } from "./entities/game.entity";
-import { VotingSystemEntity } from './entities/voting-system.entity';
-import { VotingSystemOptionEntity } from './entities/voting-system-options.entity';
 
 @Global()
 @Module({
@@ -19,12 +16,8 @@ import { VotingSystemOptionEntity } from './entities/voting-system-options.entit
           username: configService.postgresUser,
           password: configService.postgresPassword,
           database: configService.postgresDatabase,
-          entities: [
-            GameEntity,
-            VotingSystemEntity,
-            VotingSystemOptionEntity
-          ],
-          synchronize: true,
+          synchronize: false,
+          autoLoadEntities: true
         };
       },
       inject: [config.KEY]

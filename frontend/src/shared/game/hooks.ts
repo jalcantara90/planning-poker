@@ -1,11 +1,17 @@
-import { CreateGameRequest, CreateGameResponse } from "./types"
+import { useQuery } from "react-query";
+import { VotingSystem } from "../voting-system/type";
+import { CreateGameRequest, CreateGameResponse, GameOptions } from "./types"
+import { buildOptions } from "./utils";
 
-export function useGame() {
-
+export function useGameCreate() {
   const create = async (request: CreateGameRequest) => {
     try {
-      const res = await fetch('http://localhost:3001/api', {
+      const res = await fetch('http://localhost:3001/api/games', {
         method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify(request)
       });
 
@@ -19,23 +25,21 @@ export function useGame() {
   return {
     create
   };
-} 
+};
 
-export function useCreateGame() {
-  const create = async (request: CreateGameRequest) => {
-    try {
-      const res = await fetch('http://localhost:3001/api', {
-        method: 'POST',
-        body: JSON.stringify(request)
-      });
-  
-      console.log(res);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+export function useGame(gameId: string) {
+  const { data, isLoading } = useQuery<{ name: string, options: GameOptions[] }>('game', async () => {
+    const res = await fetch(`http://localhost:3001/api/games/${gameId}`);
+    const game = await res.json();
+
+    return {
+      ...game,
+      options: buildOptions(game.votingSystem)
+    };
+  });
 
   return {
-    create
-  }
+    game: data,
+    isLoading
+  };
 };

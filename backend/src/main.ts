@@ -19,6 +19,8 @@ async function bootstrap() {
     })
   );
 
+  app.enableCors();
+
   const config = new DocumentBuilder()
     .setTitle('Poker planning API')
     .setDescription('API for manage poker planning app')
