@@ -17,20 +17,24 @@ const darkTheme = createTheme({
 import { Home } from './home';
 import { Game } from './game';
 import { Layout } from './core/layout';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const queryClient = new QueryClient();
 
 function App() {
 
   return (
-    <NextUIProvider
-      theme={darkTheme}>
-      <BrowserRouter>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/:gameId" element={<Game />} />
-          </Routes>
-        </Layout>
-      </BrowserRouter>
+    <NextUIProvider theme={darkTheme}>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/:gameId" element={<Game />} />
+            </Routes>
+          </Layout>
+        </BrowserRouter>
+      </QueryClientProvider>
     </NextUIProvider>
   );
 }

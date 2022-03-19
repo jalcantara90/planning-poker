@@ -5,8 +5,9 @@ import { DatabaseModule } from '@infrastructure/database.module';
 
 import config from './config';
 import { AppService } from './app.service';
-import { AppController } from './app.controller';
 import { GameModule } from './game/game.module';
+import { AppController } from './app.controller';
+import { VotingSystemModule } from './voting-system/voting-system.module';
 
 @Module({
   imports: [
@@ -15,8 +16,9 @@ import { GameModule } from './game/game.module';
       isGlobal: true,
       load: [config]
     }),
+    DatabaseModule,
     GameModule,
-    DatabaseModule
+    VotingSystemModule,
   ],
   controllers: [AppController],
   providers: [AppService],

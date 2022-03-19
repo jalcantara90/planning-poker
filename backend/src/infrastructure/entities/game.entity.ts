@@ -1,13 +1,15 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
-import { VotingSystem } from '../types';
+import { VotingSystem } from '@infrastructure/entities';
+
 import { BaseEntity } from './base.entity';
 
-@Entity({ name: 'game' })
-export class GameEntity extends BaseEntity {
+@Entity()
+export class Game extends BaseEntity {
   @Column({ type: 'varchar' })
   name: string;
 
-  @Column({ type: 'int' })
+  @ManyToOne(() => VotingSystem, votingSystem => votingSystem.game, {})
+  @JoinColumn()
   votingSystem: VotingSystem;
 }

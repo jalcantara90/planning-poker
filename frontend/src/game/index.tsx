@@ -1,6 +1,7 @@
 import { useTheme } from '@nextui-org/react';
+import { useParams } from 'react-router-dom';
+import { FC, useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion'
-import { FC, useState, useEffect, useCallback } from 'react';
 
 import { 
   TableGrid,
@@ -25,18 +26,15 @@ import {
   Progress
 } from './table';
 import { useToggle } from '../shared/hooks';
-import { FibonnacciSystem, VotingSystem } from '../shared/game/types';
+import { GameOptions } from '../shared/game/types';
 import { fadeInDown, fadeInStaggerContainer } from '../shared/animations/fade-in';
-
-type GameOptions = {
-  value: string | number;
-  isSelected: boolean;
-}
+import { useGame } from '../shared/game/hooks';
 
 const COUNT_DOWN_TIME = 2; // in seconds
 
 export const Game: FC = () => {
-
+  const { gameId } = useParams();
+  const { game, isLoading } = useGame(gameId as string);
   const [options, setOptions] = useState<GameOptions[]>();
   const [users, setUsers] = useState<UserPlaces>({
     bottom: [],
@@ -46,15 +44,6 @@ export const Game: FC = () => {
   });
   const [reveal, toggleReveal] = useToggle(false);
   const [countDown, setCountDown] = useState<number | null>(null);
-
-  const buildOptions = useCallback((votingSystem: VotingSystem): GameOptions[] => {
-    return votingSystem.options.map((option) => {
-      return { 
-        value: option,
-        isSelected: false
-      }
-    });
-  }, []);
 
   const selectOption = (value: number | string) => {
     const lastValue = options?.find(option => option.isSelected);
@@ -97,9 +86,16 @@ export const Game: FC = () => {
   }
 
   useEffect(() => {
-    setOptions(buildOptions(FibonnacciSystem));
     setUsers(setUsersPlace(userList));
-  }, [buildOptions, setOptions]);
+  }, [setOptions]);
+
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+
+    setOptions(game?.options);
+  }, [game]);
 
   useEffect(() => {
     if (!options?.length) {
@@ -242,7 +238,9 @@ export const VotingCards: FC<VotingCardsProps> = ({ options, onSelectCard, isDis
       <VotingCardContainer {...fadeInStaggerContainer} exit={{ y: -20 }}>
         {
           options?.map((option: GameOptions, index) => (
-            <motion.div key={index} variants={fadeInDown.variants} >
+            <motion.div
+              key={index}
+              variants={fadeInDown.variants}>
               <VotingCard 
                 bordered 
                 clickable
@@ -321,11 +319,11 @@ type User = {
 }
 
 const userList: User[] = [
-  { id: '6', name: 'Eric', me: false, selectedCard: 1, isSpectator: false },
-  { id: '2', name: 'Mourad', me: false, selectedCard: 5, isSpectator: false },
-  { id: '3', name: 'Marçal', me: false, selectedCard: 2, isSpectator: false },
-  { id: '4', name: 'Carmen', me: false, selectedCard: 2, isSpectator: false },
-  { id: '5', name: 'Joan', me: false, selectedCard: 5, isSpectator: false },
+  { id: '6', name: 'Eric', me: false, selectedCard: 'S', isSpectator: false },
+  { id: '2', name: 'Mourad', me: false, selectedCard: 'S', isSpectator: false },
+  { id: '3', name: 'Marçal', me: false, selectedCard: 'M', isSpectator: false },
+  { id: '4', name: 'Carmen', me: false, selectedCard: 'L', isSpectator: false },
+  { id: '5', name: 'Joan', me: false, selectedCard: 'XL', isSpectator: false },
   { id: '1', name: 'Jonathan', me: true, isSpectator: false },
   { id: '7', name: 'Carlos', me: false, isSpectator: true },
   { id: '8', name: 'Borja', me: false, isSpectator: false },
@@ -352,4 +350,4 @@ const indexPlaces: { [key: number]: 'bottom' | 'top' | 'left' | 'right' } = {
   9: 'left',
   10: 'bottom',
   11: 'top',
-}
+};

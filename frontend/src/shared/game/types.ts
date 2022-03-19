@@ -1,17 +1,18 @@
+import { VotingSystem } from "../voting-system/type";
+
 export type Game = {
   name: string;
   votingSystem: VotingSystem;
   members: User[];
 }
 
-export type VotingSystem = {
-  id: string;
-  name: string;
-  options: Array<number | string>;
-}
-
 export type User = {
   name: string;
+}
+
+export type GameOptions = {
+  value: string | number;
+  isSelected: boolean;
 }
 
 export const FibonnacciSystem = {
@@ -30,3 +31,12 @@ export const votingSystemList = [
   FibonnacciSystem,
   TShirtSystem
 ];
+
+export type CreateGameRequest = {
+  name: string;
+  votingSystemId: string;
+}
+
+export type CreateGameResponse = {
+  id: string;
+}

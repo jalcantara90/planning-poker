@@ -3,7 +3,6 @@ import { Global, Module } from "@nestjs/common";
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import config from "../config";
-import { GameEntity } from "./entities/game.entity";
 
 @Global()
 @Module({
@@ -17,10 +16,8 @@ import { GameEntity } from "./entities/game.entity";
           username: configService.postgresUser,
           password: configService.postgresPassword,
           database: configService.postgresDatabase,
-          entities: [
-            GameEntity
-          ],
-          synchronize: true,
+          synchronize: false,
+          autoLoadEntities: true
         };
       },
       inject: [config.KEY]

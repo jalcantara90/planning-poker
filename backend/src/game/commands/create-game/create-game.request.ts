@@ -1,7 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsEnum, IsNumber } from 'class-validator';
-
-import { VotingSystem } from '@infrastructure/types';
+import { IsString, IsNotEmpty, IsUUID } from 'class-validator';
 
 export class CreateGameRequest {
   @ApiProperty() 
@@ -11,8 +9,7 @@ export class CreateGameRequest {
 
 
   @ApiProperty()
-  @IsEnum(VotingSystem)
-  @IsNumber()
+  @IsUUID()
   @IsNotEmpty()
-  votingSystem: VotingSystem;
+  votingSystemId: string;
 }
