@@ -88,7 +88,7 @@ export const PlayerContainer = styled(motion.div)`
   align-items: center;
 `;
 
-export const Player = styled(motion.div)`
+export const PlayerCardTitle = styled(motion.div)`
   font-size: 1.8rem;
   padding-top: 0.8rem;
   width: auto;

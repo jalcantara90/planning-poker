@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
-import { VotingSystem } from "../voting-system/type";
-import { CreateGameRequest, CreateGameResponse, GameOptions } from "./types"
+
 import { buildOptions } from "./utils";
+import { CreateGameRequest, CreateGameResponse, GameOptions } from "./types"
 
 export function useGameCreate() {
   const create = async (request: CreateGameRequest) => {

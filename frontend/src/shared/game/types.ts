@@ -1,13 +1,10 @@
+import { User } from "../user/types";
 import { VotingSystem } from "../voting-system/type";
 
 export type Game = {
   name: string;
   votingSystem: VotingSystem;
   members: User[];
-}
-
-export type User = {
-  name: string;
 }
 
 export type GameOptions = {
