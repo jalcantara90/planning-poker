@@ -1,12 +1,15 @@
 import { FC } from 'react';
+import { BiCog } from 'react-icons/bi';
 import { Avatar, Button, Text } from '@nextui-org/react';
 
-import { Header, HeaderSection } from './header';
 import { UserAvatar } from './user-avatar';
 import { ThemeSwitch } from './theme-switch';
-import { BiCog } from 'react-icons/bi';
+import { Header, HeaderSection } from './header';
+import { useUserContext } from '../../shared/user/context';
 
 export const Layout: FC = ({ children }) => {
+  const { user } = useUserContext();
+
   return (
     <>
       <Header>
@@ -21,11 +24,18 @@ export const Layout: FC = ({ children }) => {
             size="lg" 
             icon={<BiCog style={{ width: '1.5rem', height: '1.5rem' }} fill="currentColor" size="1rem"/>} />
         </HeaderSection>
+        
         <UserAvatar>
-          <Avatar text="JA" size="md" css={ { mr: '1rem' } }/>
-          <Text css={ { ml: '1rem' } }>
-            Jonathan
-          </Text>
+          {
+            !!user.name && (
+              <>
+                <Avatar text={user.name.slice(0, 1).toLocaleUpperCase()} size="md" css={ { mr: '1rem' } }/>
+                <Text css={ { ml: '1rem' } }>
+                  { user.name }
+                </Text>
+              </>
+            )
+          }
           <ThemeSwitch />
         </UserAvatar>
       </Header>

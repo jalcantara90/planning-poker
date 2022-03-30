@@ -7,6 +7,7 @@ import config from './config';
 import { AppService } from './app.service';
 import { GameModule } from './game/game.module';
 import { AppController } from './app.controller';
+import { EventsModule } from './events/events.module';
 import { VotingSystemModule } from './voting-system/voting-system.module';
 
 @Module({
@@ -19,6 +20,7 @@ import { VotingSystemModule } from './voting-system/voting-system.module';
     DatabaseModule,
     GameModule,
     VotingSystemModule,
+    EventsModule
   ],
   controllers: [AppController],
   providers: [AppService],

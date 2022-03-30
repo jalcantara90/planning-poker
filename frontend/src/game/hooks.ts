@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useUserContext } from './../shared/user/context';
+import { useCallback, useEffect, useState } from "react";
 
 import { buildUsersPlace } from "./utils";
 import { useToggle } from "../shared/hooks";
 import { useGame } from "../shared/game/hooks";
 import { GameOptions } from "../shared/game/types";
 import { User, UserPlaces } from "../shared/user/types";
+import { useGameSockets } from '../core/sockets/hooks';
 
 const COUNTDOWN_TIME = 2; // in seconds
 
@@ -17,8 +19,21 @@ export function useGamePlay(gameId: string) {
     right: [],
     left: []
   });
+  const [userList, setUserList] = useState<User[]>([]);
   const [reveal, toggleReveal] = useToggle(false);
   const [countDown, setCountDown] = useState<number | null>(null);
+  const { user } = useUserContext();
+
+  const onUserJoined = useCallback(({ user } : { user: User }) => {
+    debugger;
+    if (userList.some(u => u.id === user.id)) {
+      return;
+    }
+
+    setUserList(prevUserList => [...prevUserList, user]);
+  }, [])
+
+  const { joinGame } = useGameSockets(onUserJoined)
 
   const selectOption = (value: number | string) => {
     const lastValue = options?.find(option => option.isSelected);
@@ -47,6 +62,15 @@ export function useGamePlay(gameId: string) {
   useEffect(() => {
     setUsers(buildUsersPlace(userList));
   }, [userList, buildUsersPlace]);
+
+  useEffect(() => {
+    if (!user.id || userList.some(u => u.id === user.id)) {
+      return;
+    }
+
+    joinGame({user, gameId});
+    setUserList(prevState => [...prevState, user]);
+  }, [user]);
 
   useEffect(() => {
     if (isLoading) {
@@ -92,19 +116,20 @@ export function useGamePlay(gameId: string) {
     resetVoting,
     selectOption,
     reveal,
-    countDown
+    countDown,
+    // joinGame
   }
 }
 
 
-const userList: User[] = [
-  { id: '6', name: 'Eric', me: false, selectedCard: 'S', isSpectator: false },
-  { id: '2', name: 'Mourad', me: false, selectedCard: 'S', isSpectator: false },
-  { id: '3', name: 'Marçal', me: false, selectedCard: 'M', isSpectator: false },
-  { id: '4', name: 'Carmen', me: false, selectedCard: 'L', isSpectator: false },
-  { id: '5', name: 'Joan', me: false, selectedCard: 'XL', isSpectator: false },
-  { id: '1', name: 'Jonathan', me: true, isSpectator: false },
-  { id: '7', name: 'Carlos', me: false, isSpectator: true },
-  { id: '8', name: 'Borja', me: false, isSpectator: false },
-  { id: '9', name: 'Manu', me: false, isSpectator: true},
-];
+// const mockedUserList: User[] = [
+//   { id: '6', name: 'Eric', me: false, selectedCard: 'S', isSpectator: false },
+//   { id: '2', name: 'Mourad', me: false, selectedCard: 'S', isSpectator: false },
+//   { id: '3', name: 'Marçal', me: false, selectedCard: 'M', isSpectator: false },
+//   { id: '4', name: 'Carmen', me: false, selectedCard: 'L', isSpectator: false },
+//   { id: '5', name: 'Joan', me: false, selectedCard: 'XL', isSpectator: false },
+//   // { id: '1', name: 'Jonathan', me: true, isSpectator: false },
+//   { id: '7', name: 'Carlos', me: false, isSpectator: true },
+//   { id: '8', name: 'Borja', me: false, isSpectator: false },
+//   { id: '9', name: 'Manu', me: false, isSpectator: true},
+// ];

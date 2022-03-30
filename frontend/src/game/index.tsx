@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { 
@@ -17,6 +17,8 @@ import { Player } from './player';
 import { useGamePlay } from './hooks';
 import { VotingCards } from './voting-cards';
 import { VotingResume } from './voting-resume';
+import { LoginModal } from './login-modal';
+import { useUserContext } from '../shared/user/context';
 
 export const Game: FC = () => {
   const { gameId } = useParams();
@@ -29,6 +31,7 @@ export const Game: FC = () => {
     resetVoting,
     selectOption
   } = useGamePlay(gameId as string);
+  const { user } = useUserContext();
 
   return (
     <main>
@@ -101,9 +104,10 @@ export const Game: FC = () => {
       </GameContainer>
       {
         options?.length && !reveal ?
-          <VotingCards options={options} onSelectCard={selectOption} isDisabled={!!countDown}/>: 
+          !user?.isSpectator && <VotingCards options={options} onSelectCard={selectOption} isDisabled={!!countDown}/> : 
           <VotingResume userPlaces={users}/> 
       }
+      <LoginModal />
     </main>
   );
 };
