@@ -88,7 +88,7 @@ export const PlayerContainer = styled(motion.div)`
   align-items: center;
 `;
 
-export const Player = styled(motion.div)`
+export const PlayerCardTitle = styled(motion.div)`
   font-size: 1.8rem;
   padding-top: 0.8rem;
   width: auto;
@@ -98,8 +98,15 @@ export const PlayerCard = styled(motion.div)<{ isDark?: boolean, isSelected?: bo
   border-radius: 0.8rem;
   height: 7rem;
   width: 4rem;
-  background-color: ${props => props?.isDark ? !!props?.isSelected ? '#0070f3' : '#111111' : !!props?.isSelected ? '#026ff3' : '#ebf4ff'};
-  visibility: ${props => props?.isSpectator ? 'hidden' : 'inherit' };
+  background-color: ${props => {
+      if (props?.isDark) {
+        return !!props?.isSelected ? '#0070f3' : '#111111';
+      }
+
+      return !!props?.isSelected ? '#026ff3' : '#ebf4ff';
+    }
+  };
+  opacity: ${props => props?.isSpectator ? '.5' : '1' };
   display: flex;
   justify-content: center;
   align-items: center;
