@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommandHandler, ICommandHandler} from '@nestjs/cqrs';
 
-import { Game, VotingSystem } from '@infrastructure/entities';
+import { Game, VotingSystem } from '@Data/entities';
 
 import { CreateGameCommand } from './create-game.command';
 import { CreateGameResponse } from './create-game.response';

@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 
-import { VotingSystem } from '@infrastructure/entities';
+import { VotingSystem } from '@Data/entities';
 
 import { BaseEntity } from './base.entity';
 

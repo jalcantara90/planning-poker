@@ -2,7 +2,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Logger, Module } from '@nestjs/common';
 
-import { VotingSystem, VotingSystemOption } from '@infrastructure/entities';
+import { VotingSystem, VotingSystemOption } from '@Data/entities';
 
 import { VotingSystemController } from './controller/voting-system.controller';
 import { GetAllVotingHandler } from './queries/get-all-voting-system/get-all-voting-system.handler';
