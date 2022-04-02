@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef } from 'react';
+import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { 
@@ -11,7 +11,8 @@ import {
   GameRight,
   TableCard,
   CountDown,
-  TableButton
+  TableButton,
+  SharedButton
 } from './styled';
 import { Player } from './player';
 import { useGamePlay } from './hooks';
@@ -19,6 +20,7 @@ import { VotingCards } from './voting-cards';
 import { VotingResume } from './voting-resume';
 import { LoginModal } from './login-modal';
 import { useUserContext } from '../shared/user/context';
+import { MdShare } from 'react-icons/md';
 
 export const Game: FC = () => {
   const { gameId } = useParams();
@@ -34,7 +36,7 @@ export const Game: FC = () => {
   const { user } = useUserContext();
 
   return (
-    <main>
+    <main style={{ position: 'relative' }}>
       <GameContainer>
         <TableGrid>
           <GameTop>
@@ -108,6 +110,19 @@ export const Game: FC = () => {
           <VotingResume userPlaces={users}/> 
       }
       <LoginModal />
+      <SharedButton
+        auto
+        rounded
+        flat
+        color="secondary"
+        iconRight={<MdShare fill="currentColor"/>}
+        onClick={() => {
+          window.navigator.clipboard.writeText(
+            window.location.href
+          );
+        }}> 
+        Copy link 
+      </SharedButton>
     </main>
   );
 };

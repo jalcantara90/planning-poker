@@ -78,6 +78,7 @@ export const GameContainer = styled(motion.div)`
   margin: auto;
   padding-bottom: 0;
   width: 100%;
+  position: relative;
 `;
 
 export const PlayerContainer = styled(motion.div)`
@@ -131,9 +132,12 @@ export const VotingCard = styled(Card)<{ selected?: boolean, disabled?: boolean 
   font-size: 2rem;
   font-weight: bold;
   opacity: ${props => props.disabled ? .7 : 1};
-
+  
   &:hover {
     transform: translateY(-5px);
+  }
+  div {
+    overflow: hidden;
   }
 `;
 
@@ -177,4 +181,11 @@ export const Progress = styled(motion.div)<{ percentage: number }>`
   box-shadow: inset 0 2px 9px rgb(255 255 255 / 30%), inset 0 -2px 6px rgb(0 0 0 / 40%);
   position: relative;
   overflow: hidden;
+`;
+
+export const SharedButton = styled(Button)`
+  position: absolute;
+  top: 0;
+  left: 2rem;
+  font-size: 1.5rem;
 `;

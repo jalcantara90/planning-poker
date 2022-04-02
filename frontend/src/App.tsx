@@ -1,7 +1,6 @@
 import './App.css'
 
 import {
-  BrowserRouter,
   Routes,
   Route
 } from "react-router-dom";
@@ -30,14 +29,12 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <UserProvider>
           <SocketProvider>
-            <BrowserRouter>
-              <Layout>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/:gameId" element={<Game />} />
-                </Routes>
-              </Layout>
-            </BrowserRouter>
+            <Layout>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/:gameId" element={<Game />} />
+              </Routes>
+            </Layout>
           </SocketProvider>
         </UserProvider>
       </QueryClientProvider>

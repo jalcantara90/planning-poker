@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ICommandHandler, CommandHandler } from '@nestjs/cqrs';
 
-import { Game } from '@infrastructure/entities';
+import { Game } from '@Data/entities';
 
 import { GetGameByIdCommand } from './get-game-by-id.command';
 import { GetGameByIdResponse } from './get-game-by-id.response';

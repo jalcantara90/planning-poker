@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { DatabaseModule } from '@infrastructure/database.module';
+import { DatabaseModule } from '@Data/database.module';
 
 import config from './config';
 import { AppService } from './app.service';
 import { GameModule } from './game/game.module';
 import { AppController } from './app.controller';
-import { EventsModule } from './events/events.module';
+import { GameRoomModule } from './GameRoom/GameRoom.module';
 import { VotingSystemModule } from './voting-system/voting-system.module';
 
 @Module({
@@ -20,7 +20,7 @@ import { VotingSystemModule } from './voting-system/voting-system.module';
     DatabaseModule,
     GameModule,
     VotingSystemModule,
-    EventsModule
+    GameRoomModule
   ],
   controllers: [AppController],
   providers: [AppService],

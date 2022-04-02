@@ -19,21 +19,22 @@ export function useGamePlay(gameId: string) {
     right: [],
     left: []
   });
-  const [userList, setUserList] = useState<User[]>([]);
-  const [reveal, toggleReveal] = useToggle(false);
-  const [countDown, setCountDown] = useState<number | null>(null);
+
+  const onResetVoting = useCallback(() => {
+    setOptions(ops => ops?.map(option => ({ ...option, isSelected: false })));
+  }, [setOptions]);
+
   const { user } = useUserContext();
-
-  const onUserJoined = useCallback(({ user } : { user: User }) => {
-    debugger;
-    if (userList.some(u => u.id === user.id)) {
-      return;
-    }
-
-    setUserList(prevUserList => [...prevUserList, user]);
-  }, [])
-
-  const { joinGame } = useGameSockets(onUserJoined)
+  const { 
+    userList, 
+    pickCard, 
+    resetGame, 
+    countDown, 
+    setCountDown,
+    reveal, 
+    toggleReveal, 
+    initRevealGame
+  } = useGameRoom(gameId, onResetVoting);
 
   const selectOption = (value: number | string) => {
     const lastValue = options?.find(option => option.isSelected);
@@ -43,34 +44,26 @@ export function useGamePlay(gameId: string) {
     }));
   
     setOptions(updatedOptions);
-  }
+    pickCard({ user, gameId, selectedValue: value });
+  };
 
-  const revealCards = () => setCountDown(COUNTDOWN_TIME);
+  const revealCards = () => {
+    initRevealGame({ gameId });
+    setCountDown(COUNTDOWN_TIME);
+  };
+
   
   const resetVoting = () => {
     toggleReveal();
     setCountDown(null);
-    setUsers(userPlaces => ({
-      bottom: userPlaces.bottom.map(user => ({ ...user, selectedCard: null })),
-      top: userPlaces.top.map(user => ({ ...user, selectedCard: null })),
-      right: userPlaces.right.map(user => ({ ...user, selectedCard: null })),
-      left: userPlaces.left.map(user => ({ ...user, selectedCard: null }))
-    }));
+    // resetOwnGame();
+    resetGame({ gameId });
     setOptions(ops => ops?.map(option => ({ ...option, isSelected: false })));
-  }
+  };
 
   useEffect(() => {
     setUsers(buildUsersPlace(userList));
   }, [userList, buildUsersPlace]);
-
-  useEffect(() => {
-    if (!user.id || userList.some(u => u.id === user.id)) {
-      return;
-    }
-
-    joinGame({user, gameId});
-    setUserList(prevState => [...prevState, user]);
-  }, [user]);
 
   useEffect(() => {
     if (isLoading) {
@@ -80,23 +73,83 @@ export function useGamePlay(gameId: string) {
     setOptions(game?.options);
   }, [game]);
 
+  return {
+    options,
+    users,
+    revealCards,
+    resetVoting,
+    selectOption,
+    reveal,
+    countDown
+  }
+}
+
+
+function useGameRoom(gameId: string, onResetVoting: () => void) {
+  const [userList, setUserList] = useState<User[]>([]);
+  const { user } = useUserContext();
+  const [countDown, setCountDown] = useState<number | null>(null);
+  const [reveal, toggleReveal, setReveal] = useToggle(false);
+  const onUserJoined = useCallback(({ userList } : { userList: User[] }) => {
+    setUserList(userList);
+  }, []);
+
+  const initShowCards = useCallback(() => {
+    setCountDown(COUNTDOWN_TIME);
+  }, []);
+
+  const showCards = useCallback(() => {
+    toggleReveal();
+  }, [toggleReveal]);
+
+  const resetVoting = useCallback(({ userList }: { userList: User[] }) => {
+    setReveal(false);
+    setCountDown(null);
+    setUserList(userList);
+    onResetVoting();
+  }, [onResetVoting, toggleReveal, setCountDown]);
+
+  const { 
+    joinGame, 
+    pickCard,
+    leftGame,
+    resetGame,
+    revealGame,
+    initRevealGame,
+  } = useGameSockets({
+    onUserJoined,
+    onUserPickCard: onUserJoined,
+    initShowCards,
+    showCards,
+    onResetVoting: resetVoting
+  });
+
+  const getRoom = useCallback(async () => {
+    const res = await fetch(`http://localhost:3001/api/game-rooms/${gameId}`);
+    const data = await res.json();
+    setUserList(data.userList);
+  }, []);
+
   useEffect(() => {
-    if (!options?.length) {
-      return;
-    }
+    getRoom();
+  }, [getRoom, gameId]);
 
-    const selectedOption = options?.find(option => option.isSelected);
+  useEffect(() => {
+    const leftGameFn = () => {
+      leftGame({ user, gameId });
+    };
 
-    setUsers(prevState => ({
-      ...prevState,
-      bottom: prevState.bottom.map((user) => {
-        if (user.me) {
-          user.selectedCard = selectedOption?.value;
-        }
-        return user;
-      })
-    }));    
-  }, [options]);
+    window.addEventListener('beforeunload', leftGameFn);
+    return () => {
+      leftGame({ user, gameId });
+      window.removeEventListener('beforeunload', leftGameFn);
+    };
+  }, [])
+
+
+  useEffect(() => {
+    joinGame({user, gameId});
+  }, [user, gameId]);
 
   useEffect(() => {
     countDown && countDown > 0 && setTimeout(
@@ -110,26 +163,26 @@ export function useGamePlay(gameId: string) {
   }, [countDown]);
 
   return {
-    options,
-    users,
-    revealCards,
-    resetVoting,
-    selectOption,
-    reveal,
+    userList,
+    joinGame,
+    pickCard: ({ user, gameId, selectedValue }: { user: User, gameId: string, selectedValue: string | number}) => {
+      pickCard({ user, gameId, selectedValue }, ({ userList, gameId: gId }: any) => {
+        if (gId !== gameId) {
+          return;
+        }
+  
+        setUserList(userList);
+      });
+    },
+    resetGame: ({ gameId }: { gameId: string}) => {
+      resetGame({ gameId });
+      setUserList(uList => uList.map(x => ({ ...x, selectedCard: '' })));
+    },
+    revealGame,
     countDown,
-    // joinGame
-  }
+    reveal,
+    setCountDown,
+    toggleReveal,
+    initRevealGame
+  };
 }
-
-
-// const mockedUserList: User[] = [
-//   { id: '6', name: 'Eric', me: false, selectedCard: 'S', isSpectator: false },
-//   { id: '2', name: 'Mourad', me: false, selectedCard: 'S', isSpectator: false },
-//   { id: '3', name: 'Marçal', me: false, selectedCard: 'M', isSpectator: false },
-//   { id: '4', name: 'Carmen', me: false, selectedCard: 'L', isSpectator: false },
-//   { id: '5', name: 'Joan', me: false, selectedCard: 'XL', isSpectator: false },
-//   // { id: '1', name: 'Jonathan', me: true, isSpectator: false },
-//   { id: '7', name: 'Carlos', me: false, isSpectator: true },
-//   { id: '8', name: 'Borja', me: false, isSpectator: false },
-//   { id: '9', name: 'Manu', me: false, isSpectator: true},
-// ];

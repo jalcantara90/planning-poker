@@ -1,10 +1,13 @@
 import { v4 as uuid } from 'uuid';
+import { useNavigate } from 'react-router-dom';
 import { createContext, FC, useContext, useEffect, useState } from "react";
+
 import { User } from "./types";
 
 interface IUserContext {
-  user: User;
+  user: User | null;
   createUser: ({ isSpectator, name }: { isSpectator: boolean, name: string }) => void;
+  logout: () => void;
 }
 
 const initialContext = {
@@ -17,13 +20,17 @@ const initialContext = {
   },
   createUser: (): never => {
     throw new Error();
+  },
+  logout: (): never => {
+    throw new Error();
   }
 }
 
 const UserContext = createContext<IUserContext>(initialContext);
 
 export const UserProvider: FC = ({ children }) => {
-  const [user, setUser] = useState<User>(initialContext.user);
+  const [user, setUser] = useState<User | null>(initialContext.user);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -45,10 +52,17 @@ export const UserProvider: FC = ({ children }) => {
     setUser(me);
   };
 
+  const logout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+    navigate('/');
+  };
+
   return (
     <UserContext.Provider value={{
       user,
-      createUser
+      createUser,
+      logout
     }}>
       {children}
     </UserContext.Provider>
