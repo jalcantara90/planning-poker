@@ -15,13 +15,13 @@ export type GameOptions = {
 export const FibonnacciSystem = {
   id: '1',
   name: 'Fibonnacci',
-  options: [ 0, 1, 3, 5, 8, 13, 21, 34, 55, 89, '?' ]
+  options: [ "0", "1", "3", "5", "8", "13", "21", "34", "55", "89", "?" ]
 };
 
 export const TShirtSystem = {
   id: '2',
   name: 'Tshirt',
-  options: [ 'S', 'M', 'L', 'XL' ]
+  options: [ "S", "M", "L", "XL" ]
 };
 
 export const votingSystemList = [

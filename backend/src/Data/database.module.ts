@@ -10,12 +10,12 @@ import config from "../config";
     TypeOrmModule.forRootAsync({
       useFactory: (configService: ConfigType<typeof config>) => {
         return {
-          type: 'postgres',
-          host: configService.postgresHost,
-          port: +configService.postgresPort,
-          username: configService.postgresUser,
-          password: configService.postgresPassword,
-          database: configService.postgresDatabase,
+          type: 'mssql',
+          host: configService.typeORMHost,
+          port: +configService.typeORMPort,
+          username: configService.typeORMUser,
+          password: configService.typeORMPassword,
+          database: configService.typeORMDatabase,
           synchronize: false,
           autoLoadEntities: true
         };
