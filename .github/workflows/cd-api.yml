@@ -49,7 +49,7 @@ jobs:
           app-name: 'planning-poker-api'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8435DE2428EE4F5F8CD4A60D082412BD }}
-          package: .
+          package: ./backend/dist
 
   # deploy:
   #   runs-on: ubuntu-latest
