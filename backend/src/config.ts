@@ -1,11 +1,11 @@
 import { registerAs } from "@nestjs/config";
 
 export default registerAs('config', () => ({
-  dbType: 'postgres',
   port: process.env.PORT,
-  postgresPort: process.env.POSTGRES_PORT,
-  postgresHost: process.env.POSTGRES_HOST,
-  postgresUser: process.env.POSTGRES_USER,
-  postgresPassword: process.env.POSTGRES_PASSWORD,
-  postgresDatabase: process.env.POSTGRES_DATABASE
+  typeORMPort: process.env.TYPEORM_PORT,
+  typeORMHost: process.env.TYPEORM_HOST,
+  typeORMUser: process.env.TYPEORM_USERNAME,
+  typeORMDatabase: process.env.TYPEORM_DATABASE,
+  typeORMPassword: process.env.TYPEORM_PASSWORD,
+  typeORMPConnection: process.env.TYPEORM_CONNECTION
 }));
