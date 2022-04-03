@@ -27,14 +27,14 @@ jobs:
           npm install
           npm run build --if-present
 
-      - name: Tar files
-        run: tar -cvf my_files.tar ./backend
+      - name: Zip files
+        run: tar -czvf backend.tar -C backend .  
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: nestjs-api
-          path: my_files.tar
+          path: backend.tar
 
       # - name: Upload artifact for deployment job
       #   uses: actions/upload-artifact@v2
@@ -64,7 +64,9 @@ jobs:
           name: nestjs-api
 
       - name: Unzip artifact from build job
-        run: tar -xf my_files.tar
+        run: |
+          tar -xf backend.tar
+          rm -rf backend.tar
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
