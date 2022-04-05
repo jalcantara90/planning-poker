@@ -26,6 +26,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^21.0.3",
     "@types/react": "^17.0.43",
     "@types/react-dom": "^17.0.10",
     "@types/socket.io": "^3.0.2",
