@@ -2,6 +2,7 @@ import { Button, Input, Modal, Switch, Text } from "@nextui-org/react";
 import { FC, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useUserContext } from "../../shared/user/context";
+import { User } from "../../shared/user/types";
 import { Label } from "./styled";
 import { buildValidation } from "./utils";
 
@@ -24,7 +25,7 @@ export const LoginModal: FC = () => {
   });
 
   useEffect(() => {
-    setVisible(!user.name);
+    setVisible(!(user as User).name);
   }, [user])
 
   const { control, handleSubmit, formState: { isValid } } = methods;
