@@ -36,20 +36,6 @@ jobs:
           name: nestjs-api
           path: backend.tar
 
-      # - name: Upload artifact for deployment job
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: nestjs-api
-      #     path: ./backend
-
-      # - name: 'Deploy to Azure Web App'
-      #   id: deploy-to-webapp
-      #   uses: azure/webapps-deploy@v2
-      #   with:
-      #     app-name: 'planning-poker-api'
-      #     publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8435DE2428EE4F5F8CD4A60D082412BD }}
-      #     package: .
-
   deploy:
     runs-on: ubuntu-latest
     needs: build

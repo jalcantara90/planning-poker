@@ -1,3 +1,4 @@
+import { settings } from './../settings';
 import { useState, useEffect, useCallback } from 'react';
 
 import { VotingSystem } from './type';
@@ -7,7 +8,7 @@ export function useVotingSystem() {
 
   const getAll = useCallback(async () => {
     try {
-      const res = await fetch('http://localhost:3001/api/voting-system');
+      const res = await fetch(`${settings.apiUrl}/api/voting-system`);
       const data = await res.json();
       setVotingSystemList(data);
     } catch (error) {

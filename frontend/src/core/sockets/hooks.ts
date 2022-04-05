@@ -2,17 +2,18 @@ import { useEffect } from 'react';
 import { io } from "socket.io-client";
 
 import { User } from '../../shared/user/types';
+import { settings } from '../../shared/settings';
 
 type UseGameSockets = {
-  onUserJoined: ({userList}: {userList: User[]}) => void;
-  onUserPickCard: ({userList}: {userList: User[]}) => void;
-  initShowCards: () => void;
-  showCards: () => void;
-  onResetVoting: ({ userList }: {userList: User[]}) => void;
+  onUserJoined: (params: { userList: User[], gameId: string }) => void;
+  onUserPickCard: (params: { userList: User[], gameId: string }) => void;
+  initShowCards: (params: {gameId: string }) => void;
+  showCards: (params: {gameId: string }) => void;
+  onResetVoting: (params: { userList: User[], gameId: string }) => void;
 };
 
 export function useGameSockets({ onUserJoined, initShowCards, showCards, onResetVoting }: UseGameSockets) {
-  const socket = io("http://localhost:3001", { transports: ['websocket'] });
+  const socket = io(settings.apiUrl, { transports: ['websocket'] });
 
   useEffect(() => {
     socket.on('REFRESH_USERLIST', onUserJoined);

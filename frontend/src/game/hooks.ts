@@ -1,12 +1,13 @@
-import { useUserContext } from './../shared/user/context';
 import { useCallback, useEffect, useState } from "react";
 
 import { buildUsersPlace } from "./utils";
 import { useToggle } from "../shared/hooks";
+import { settings } from '../shared/settings';
 import { useGame } from "../shared/game/hooks";
 import { GameOptions } from "../shared/game/types";
 import { User, UserPlaces } from "../shared/user/types";
 import { useGameSockets } from '../core/sockets/hooks';
+import { useUserContext } from '../shared/user/context';
 
 const COUNTDOWN_TIME = 2; // in seconds
 
@@ -44,7 +45,7 @@ export function useGamePlay(gameId: string) {
     }));
   
     setOptions(updatedOptions);
-    pickCard({ user, gameId, selectedValue: value });
+    pickCard({ user: user as User, gameId, selectedValue: value });
   };
 
   const revealCards = () => {
@@ -56,7 +57,6 @@ export function useGamePlay(gameId: string) {
   const resetVoting = () => {
     toggleReveal();
     setCountDown(null);
-    // resetOwnGame();
     resetGame({ gameId });
     setOptions(ops => ops?.map(option => ({ ...option, isSelected: false })));
   };
@@ -84,25 +84,39 @@ export function useGamePlay(gameId: string) {
   }
 }
 
-
 function useGameRoom(gameId: string, onResetVoting: () => void) {
   const [userList, setUserList] = useState<User[]>([]);
   const { user } = useUserContext();
   const [countDown, setCountDown] = useState<number | null>(null);
   const [reveal, toggleReveal, setReveal] = useToggle(false);
-  const onUserJoined = useCallback(({ userList } : { userList: User[] }) => {
+  const onUserJoined = useCallback(({ userList, gameId: gId } : { userList: User[], gameId: string }) => {
+    if (gId !== gameId) {
+      return;
+    }
     setUserList(userList);
   }, []);
 
-  const initShowCards = useCallback(() => {
+  const initShowCards = useCallback(({ gameId: gId }) => {
+    if (gId !== gameId) {
+      return;
+    }
+
     setCountDown(COUNTDOWN_TIME);
   }, []);
 
-  const showCards = useCallback(() => {
+  const showCards = useCallback(({ gameId: gId }) => {
+    if (gId !== gameId) {
+      return;
+    }
+
     toggleReveal();
   }, [toggleReveal]);
 
-  const resetVoting = useCallback(({ userList }: { userList: User[] }) => {
+  const resetVoting = useCallback(({ userList, gameId: gId }: { userList: User[], gameId: string }) => {
+    if (gId !== gameId) {
+      return;
+    }
+
     setReveal(false);
     setCountDown(null);
     setUserList(userList);
@@ -125,7 +139,7 @@ function useGameRoom(gameId: string, onResetVoting: () => void) {
   });
 
   const getRoom = useCallback(async () => {
-    const res = await fetch(`http://localhost:3001/api/game-rooms/${gameId}`);
+    const res = await fetch(`${settings.apiUrl}/api/game-rooms/${gameId}`);
     const data = await res.json();
     setUserList(data.userList);
   }, []);
@@ -136,11 +150,19 @@ function useGameRoom(gameId: string, onResetVoting: () => void) {
 
   useEffect(() => {
     const leftGameFn = () => {
+      if (!user) {
+        return;
+      }
+      
       leftGame({ user, gameId });
     };
 
     window.addEventListener('beforeunload', leftGameFn);
     return () => {
+      if (!user) {
+        return;
+      }
+      
       leftGame({ user, gameId });
       window.removeEventListener('beforeunload', leftGameFn);
     };
@@ -148,6 +170,10 @@ function useGameRoom(gameId: string, onResetVoting: () => void) {
 
 
   useEffect(() => {
+    if (!user) {
+      return;
+    }
+
     joinGame({user, gameId});
   }, [user, gameId]);
 

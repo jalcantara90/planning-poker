@@ -1,3 +1,4 @@
+import { settings } from './../settings';
 import { useQuery } from "react-query";
 
 import { buildOptions } from "./utils";
@@ -6,7 +7,7 @@ import { CreateGameRequest, CreateGameResponse, GameOptions } from "./types"
 export function useGameCreate() {
   const create = async (request: CreateGameRequest) => {
     try {
-      const res = await fetch('http://localhost:3001/api/games', {
+      const res = await fetch(settings.apiUrl + '/api/games', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -29,7 +30,7 @@ export function useGameCreate() {
 
 export function useGame(gameId: string) {
   const { data, isLoading } = useQuery<{ name: string, options: GameOptions[] }>('game', async () => {
-    const res = await fetch(`http://localhost:3001/api/games/${gameId}`);
+    const res = await fetch(`${settings.apiUrl}/api/games/${gameId}`);
     const game = await res.json();
 
     return {
