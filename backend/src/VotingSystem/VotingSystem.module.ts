@@ -2,11 +2,11 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Logger, Module } from '@nestjs/common';
 
-import { VotingSystem, VotingSystemOption } from '@Data/entities';
+import { VotingSystem, VotingSystemOption } from '@Data/Entities';
 
-import { VotingSystemController } from './controller/voting-system.controller';
-import { GetAllVotingHandler } from './queries/get-all-voting-system/get-all-voting-system.handler';
-import { CreateVotingSystemHandler } from './commands/create-voting-system/create-voting-system.handler';
+import { VotingSystemController } from './controller/VotingSystem.controller';
+import { GetAllVotingHandler } from './queries/GetAllVotingSystem/GetAllVotingSystemHandler';
+import { CreateVotingSystemHandler } from './commands/CreateVotingSystem/CreateVotingSystemHandler';
 
 const handlers = [
   CreateVotingSystemHandler,

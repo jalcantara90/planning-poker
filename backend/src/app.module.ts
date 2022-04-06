@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { DatabaseModule } from '@Data/database.module';
+import { DatabaseModule } from '@Data/Database.module';
 
-import config from './config';
+import config from './Config';
 import { AppService } from './app.service';
-import { GameModule } from './game/game.module';
+import { GameModule } from './Game/Game.module';
 import { AppController } from './app.controller';
 import { GameRoomModule } from './GameRoom/GameRoom.module';
-import { VotingSystemModule } from './voting-system/voting-system.module';
+import { VotingSystemModule } from './VotingSystem/VotingSystem.module';
 
 @Module({
   imports: [

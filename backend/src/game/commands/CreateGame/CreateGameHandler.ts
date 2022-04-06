@@ -2,10 +2,10 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommandHandler, ICommandHandler} from '@nestjs/cqrs';
 
-import { Game, VotingSystem } from '@Data/entities';
+import { Game, VotingSystem } from '@Data/Entities';
 
-import { CreateGameCommand } from './create-game.command';
-import { CreateGameResponse } from './create-game.response';
+import { CreateGameCommand } from './CreateGameCommand';
+import { CreateGameResponse } from './CreateGameResponse';
 
 @CommandHandler(CreateGameCommand)
 export class CreateGameHandler implements ICommandHandler<CreateGameCommand, CreateGameResponse> {

@@ -2,7 +2,7 @@ import { ConfigType } from "@nestjs/config";
 import { Global, Module } from "@nestjs/common";
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import config from "../config";
+import config from "../Config";
 
 @Global()
 @Module({
