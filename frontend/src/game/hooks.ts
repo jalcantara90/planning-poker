@@ -182,10 +182,6 @@ function useGameRoom(gameId: string, onResetVoting: () => void) {
       () => setCountDown(countDown - 1),
       1000
     );
-
-    if (countDown === 0) {
-      toggleReveal();
-    }
   }, [countDown]);
 
   return {
