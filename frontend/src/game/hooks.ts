@@ -184,7 +184,7 @@ function useGameRoom(gameId: string, onResetVoting: () => void) {
     );
 
     if (countDown === 0) {
-      toggleReveal();
+      setReveal(true);
     }
   }, [countDown]);
 
