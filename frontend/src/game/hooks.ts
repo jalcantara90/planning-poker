@@ -109,7 +109,7 @@ function useGameRoom(gameId: string, onResetVoting: () => void) {
       return;
     }
 
-    toggleReveal();
+    setReveal(true);
   }, [toggleReveal]);
 
   const resetVoting = useCallback(({ userList, gameId: gId }: { userList: User[], gameId: string }) => {
@@ -182,6 +182,10 @@ function useGameRoom(gameId: string, onResetVoting: () => void) {
       () => setCountDown(countDown - 1),
       1000
     );
+
+    if (countDown === 0) {
+      toggleReveal();
+    }
   }, [countDown]);
 
   return {
