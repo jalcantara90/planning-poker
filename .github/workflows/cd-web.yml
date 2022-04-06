@@ -14,9 +14,10 @@ jobs:
         with:
           submodules: true
 
-      - name: Install is-react dependency
-        working-directory: ./frontend
-        run: npm install is-react
+      - name: Set up Node.js version
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.x'
 
       - name: Build And Deploy
         id: builddeploy
