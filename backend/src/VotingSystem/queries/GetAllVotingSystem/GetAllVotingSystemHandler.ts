@@ -2,10 +2,10 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ICommandHandler, CommandHandler } from '@nestjs/cqrs';
 
-import { VotingSystem } from '@Data/entities';
+import { VotingSystem } from '@Data/Entities';
 
-import { GetAllVotingSystemCommand } from './get-all-voting-system.command';
-import { GetAllVotingSystemResponse } from './get-all-voting-system.response';
+import { GetAllVotingSystemCommand } from './GetAllVotingSystemCommand';
+import { GetAllVotingSystemResponse } from './GetAllVotingSystemResponse';
 
 @CommandHandler(GetAllVotingSystemCommand)
 export class GetAllVotingHandler implements ICommandHandler<GetAllVotingSystemCommand, GetAllVotingSystemResponse[]> {

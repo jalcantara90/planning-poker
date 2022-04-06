@@ -2,11 +2,11 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Logger, Module } from '@nestjs/common';
 
-import { Game, VotingSystem } from '@Data/entities';
+import { Game, VotingSystem } from '@Data/Entities';
 
-import { GameController } from './controller/game.controller';
-import { CreateGameHandler } from './commands/create-game/create-game.handler';
-import { GetGameByIdHandler } from './queries/get-game-by-id/get-game-by-id.handler';
+import { GameController } from './controller/Game.controller';
+import { CreateGameHandler } from './commands/CreateGame/CreateGameHandler';
+import { GetGameByIdHandler } from './queries/GetGameById/GetGameByIdHandler';
 
 const handlers = [
   CreateGameHandler,

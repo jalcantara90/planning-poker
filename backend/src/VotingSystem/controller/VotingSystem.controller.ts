@@ -2,8 +2,8 @@ import { ApiTags } from '@nestjs/swagger';
 import { CommandBus } from '@nestjs/cqrs';
 import { Controller, Post, Body, Get } from '@nestjs/common';
 
-import { GetAllVotingSystemCommand } from '../queries/get-all-voting-system';
-import { CreateVotingSystemRequest, CreateVotingSystemCommand } from '../commands/create-voting-system';
+import { GetAllVotingSystemCommand } from '../queries/GetAllVotingSystem';
+import { CreateVotingSystemRequest, CreateVotingSystemCommand } from '../commands/CreateVotingSystem';
 
 @ApiTags('VotingSystem')
 @Controller('voting-system')

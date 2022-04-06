@@ -2,8 +2,8 @@ import { CommandBus } from '@nestjs/cqrs';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Body, Controller, HttpStatus, Post, Get, Param } from '@nestjs/common';
 
-import { GetGameByIdCommand, GetGameByIdResponse } from '../queries/get-game-by-id';
-import { CreateGameRequest, CreateGameResponse, CreateGameCommand } from '../commands/create-game';
+import { GetGameByIdCommand, GetGameByIdResponse } from '../queries/GetGameById';
+import { CreateGameRequest, CreateGameResponse, CreateGameCommand } from '../commands/CreateGame';
 
 @ApiTags('Games')
 @Controller('games')
