@@ -7,6 +7,9 @@
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "dependencies": {
     "@hookform/resolvers": "^2.8.8",
     "@nextui-org/react": "^1.0.2-beta.4",
